@@ -207,14 +207,36 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);font-fam
 
 /* DISH AD */
 #dishAd{z-index:65;}
-.dish-icon{font-size:80px;margin-bottom:8px;display:block;}
-.dish-ar{font-size:22px;font-weight:900;color:var(--gold);}
-.dish-en{font-size:13px;color:var(--cream);margin-bottom:8px;font-style:italic;}
+.dish-ad-card{
+  background:linear-gradient(155deg,#1f0900,#0d0d0d);
+  border:2px solid var(--gold);border-radius:20px;
+  max-width:330px;width:93%;text-align:center;
+  box-shadow:0 0 60px rgba(245,197,24,.2);
+  animation:cardIn .4s ease-out;
+  overflow:hidden;}
+.dish-photo-wrap{
+  width:100%;height:200px;position:relative;overflow:hidden;}
+.dish-photo{
+  width:100%;height:100%;object-fit:cover;
+  display:block;transition:transform .4s ease;}
+.dish-photo-wrap:hover .dish-photo{transform:scale(1.04);}
+.dish-photo-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(15,5,0,.9) 0%,rgba(0,0,0,.1) 50%,transparent 100%);}
+.dish-photo-badge{
+  position:absolute;top:10px;right:10px;
+  background:var(--red);color:#fff;
+  font-size:10px;font-weight:900;
+  padding:4px 10px;border-radius:20px;
+  border:1px solid rgba(255,255,255,.3);}
+.dish-body{padding:14px 16px 16px;}
+.dish-ar{font-size:20px;font-weight:900;color:var(--gold);margin-bottom:2px;}
+.dish-en{font-size:12px;color:var(--cream);margin-bottom:8px;font-style:italic;opacity:.8;}
 .dish-desc{font-size:12px;color:rgba(255,255,255,.75);line-height:1.6;margin-bottom:10px;}
 .dish-cta{
-  font-size:12px;color:var(--gold);font-weight:700;
-  background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);
-  border-radius:8px;padding:7px 12px;margin-bottom:12px;display:block;}
+  font-size:13px;color:var(--gold);font-weight:900;
+  background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.4);
+  border-radius:8px;padding:8px 14px;margin-bottom:12px;display:block;}
 
 /* COUNTDOWN */
 #countdownPop{
@@ -291,6 +313,63 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);font-fam
   border-radius:4px;transition:width .1s;}
 .ld-tip{font-size:11px;color:rgba(255,255,255,.4);text-align:center;max-width:280px;}
 
+/* SOCIAL FOLLOW STEP */
+#followScreen{z-index:15;}
+.follow-card{
+  background:linear-gradient(155deg,#1f0900,#0d0d0d);
+  border:2px solid rgba(245,197,24,.4);border-radius:20px;
+  padding:24px 18px;max-width:360px;width:96%;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.8);}
+.follow-title{font-size:22px;font-weight:900;color:var(--gold);margin-bottom:4px;}
+.follow-sub{font-size:13px;color:var(--cream);margin-bottom:18px;line-height:1.6;opacity:.85;}
+.social-btn{
+  width:100%;padding:14px 16px;border-radius:14px;border:none;
+  display:flex;align-items:center;gap:12px;margin-bottom:10px;
+  font-family:var(--ar);font-size:16px;font-weight:900;
+  cursor:pointer;transition:all .2s;position:relative;text-decoration:none;}
+.social-btn:active{transform:scale(.97);}
+.social-tiktok{
+  background:linear-gradient(135deg,#010101,#1a1a2e);
+  border:2px solid rgba(255,255,255,.15);color:#fff;}
+.social-insta{
+  background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
+  color:#fff;}
+.social-icon{font-size:26px;flex-shrink:0;}
+.social-info{flex:1;text-align:right;}
+.social-name{font-size:15px;font-weight:900;}
+.social-handle{font-size:11px;opacity:.75;font-weight:500;direction:ltr;text-align:left;}
+.social-check{
+  width:26px;height:26px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;transition:all .3s;}
+.social-check.done{
+  background:var(--green);border-color:var(--green);}
+.follow-divider{
+  display:flex;align-items:center;gap:10px;margin:12px 0;
+  color:rgba(255,255,255,.3);font-size:11px;}
+.follow-divider::before,.follow-divider::after{
+  content:'';flex:1;height:1px;background:rgba(255,255,255,.1);}
+.follow-note{
+  font-size:11px;color:rgba(255,255,255,.45);
+  margin-bottom:14px;line-height:1.6;}
+.btn-start-now{
+  width:100%;padding:15px;border:none;border-radius:12px;
+  font-family:var(--ar);font-size:17px;font-weight:900;
+  cursor:pointer;transition:all .2s;
+  background:linear-gradient(135deg,#555,#333);
+  color:rgba(255,255,255,.4);
+  pointer-events:none;}
+.btn-start-now.ready{
+  background:linear-gradient(135deg,#e8001f,var(--red),var(--dred));
+  color:#fff;pointer-events:all;
+  box-shadow:0 8px 28px rgba(200,16,46,.45);}
+.btn-start-now.ready:active{transform:scale(.97);}
+.follow-skip{
+  font-size:11px;color:rgba(255,255,255,.25);
+  margin-top:10px;cursor:pointer;text-decoration:underline;
+  display:block;}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-thumb{background:rgba(245,197,24,.25);border-radius:2px;}
@@ -313,7 +392,67 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);font-fam
     <div class="ld-tip">أشهى المأكولات العربية والغربية والمشاوي</div>
   </div>
 
-  <!-- WELCOME -->
+  <!-- FOLLOW SCREEN (Step 1) -->
+  <div class="screen" id="followScreen">
+    <div class="follow-card">
+      <!-- Logo mini -->
+      <div style="margin-bottom:14px;">
+        <img src="oberge-logo.png" style="height:64px;object-fit:contain;
+          filter:drop-shadow(0 4px 10px rgba(200,16,46,.5));animation:float 3s ease-in-out infinite;"
+          onerror="this.style.display='none'">
+      </div>
+      <div class="follow-title">🏆 تحدي كأس العالم</div>
+      <div style="font-size:11px;color:var(--gold);font-weight:700;margin-bottom:10px;
+        font-family:'Bebas Neue',cursive;letter-spacing:3px;">AL OBERGE WORLD CUP CHALLENGE</div>
+      <div class="follow-sub">
+        لتتمكن من اللعب والمشاركة في السحب على الجوائز،<br>
+        يرجى متابعة صفحاتنا أولاً 👇
+      </div>
+
+      <!-- TikTok Button -->
+      <a href="https://www.tiktok.com/@aloberge" target="_blank"
+         class="social-btn social-tiktok" id="btnTiktok" onclick="markFollow('tiktok')">
+        <span class="social-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.75a4.85 4.85 0 01-1.01-.06z"/>
+          </svg>
+        </span>
+        <div class="social-info">
+          <div class="social-name">تابعنا على TikTok</div>
+          <div class="social-handle">@aloberge</div>
+        </div>
+        <div class="social-check" id="chkTiktok">✓</div>
+      </a>
+
+      <!-- Instagram Button -->
+      <a href="https://www.instagram.com/aloberge.restaurant" target="_blank"
+         class="social-btn social-insta" id="btnInsta" onclick="markFollow('insta')">
+        <span class="social-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+        </span>
+        <div class="social-info">
+          <div class="social-name">تابعنا على Instagram</div>
+          <div class="social-handle">@aloberge.restaurant</div>
+        </div>
+        <div class="social-check" id="chkInsta">✓</div>
+      </a>
+
+      <div class="follow-divider">بعد المتابعة</div>
+      <div class="follow-note">
+        ✅ بعد الضغط على كل زر ومتابعة الصفحة، ستضيء الأزرار باللون الأخضر<br>
+        🎁 تابع الصفحتين للحصول على فرصة مضاعفة في السحب الشهري
+      </div>
+
+      <button class="btn-start-now" id="btnStartNow" onclick="goToRegister()">
+        🚀 تابعت الصفحتين — ابدأ اللعبة!
+      </button>
+      <span class="follow-skip" onclick="skipFollow()">تخطي (لن تُحتسب في السحب)</span>
+    </div>
+  </div>
+
+  <!-- WELCOME / REGISTER (Step 2) -->
   <div class="screen" id="welcomeScreen">
     <div class="logo-wrap">
       <div class="logo-ring">
@@ -329,16 +468,25 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);font-fam
       <div class="wtag">أشهى المأكولات العربية والغربية والمشاوي</div>
     </div>
     <div class="ribbon">⚽ سدد الكرات × 60 ثانية × اجمع النقاط × اربح كوبونات خصم ⚽</div>
+
+    <!-- Social badges if followed -->
+    <div id="followBadges" style="display:none;max-width:340px;width:100%;margin-bottom:6px;">
+      <div style="background:rgba(0,102,51,.2);border:1px solid rgba(0,200,100,.3);
+        border-radius:10px;padding:8px 14px;font-size:12px;color:#4dff99;font-weight:700;text-align:center;">
+        ✅ شكراً على متابعتك! أنت مشارك في السحب الشهري 🎁
+      </div>
+    </div>
+
     <div class="form-group">
       <label class="flabel">اسمك اللاعب</label>
       <input class="finput" id="pName" type="text" placeholder="أدخل اسمك هنا..." maxlength="22">
     </div>
     <div class="form-group">
-      <label class="flabel">رقم الهاتف (اختياري — للسحب الشهري)</label>
+      <label class="flabel">رقم الهاتف (للسحب الشهري على الجوائز)</label>
       <input class="finput" id="pPhone" type="tel" placeholder="05xxxxxxxx" maxlength="15" dir="ltr">
     </div>
     <div class="consent-row">
-      <input type="checkbox" class="chk" id="pConsent">
+      <input type="checkbox" class="chk" id="pConsent" checked>
       <label class="clabel" for="pConsent">أوافق على المشاركة في السحب الشهري على جوائز مطعم الأوبرج</label>
     </div>
     <button class="btn btn-red" onclick="initGame()">🚀 ابدأ اللعبة!</button>
@@ -451,19 +599,26 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);font-fam
 
   <!-- DISH AD MODAL -->
   <div class="modal-bg" id="dishAd">
-    <div class="modal-card">
-      <span class="dish-icon" id="dIcon">🍖</span>
-      <div class="dish-ar" id="dAr">-</div>
-      <div class="dish-en" id="dEn">-</div>
-      <div class="dish-desc" id="dDesc">-</div>
-      <span class="dish-cta" id="dCta">-</span>
-      <button class="btn btn-red" onclick="closeDishAd()" style="max-width:100%;">⚽ متابعة اللعب</button>
+    <div class="dish-ad-card">
+      <div class="dish-photo-wrap">
+        <img id="dPhoto" class="dish-photo" src="" alt="dish">
+        <div class="dish-photo-overlay"></div>
+        <div class="dish-photo-badge" id="dBadge">من مطعم الأوبرج</div>
+      </div>
+      <div class="dish-body">
+        <div class="dish-ar" id="dAr">-</div>
+        <div class="dish-en" id="dEn">-</div>
+        <div class="dish-desc" id="dDesc">-</div>
+        <span class="dish-cta" id="dCta">-</span>
+        <button class="btn btn-red" onclick="closeDishAd()" style="max-width:100%;">⚽ متابعة اللعب</button>
+      </div>
     </div>
   </div>
 
   <canvas id="confetti"></canvas>
 </div>
 
+<script src="photos.js"></script>
 <script>
 /* ================================================================
    AL OBERGE RESTAURANT — WORLD CUP CHALLENGE
@@ -496,36 +651,47 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);font-fam
   window.addEventListener('resize',()=>{ c.width=window.innerWidth; c.height=window.innerHeight; });
 })();
 
-// ─── MENU DATA ───────────────────────────────────────────────────
+// ─── MENU DATA (with real restaurant photos) ─────────────────────
 const MENU=[
-  {ico:'🥩',ar:'مشاوي الأوبرج الخاصة',en:'Al Oberge Special Grill',
-   desc:'5 أنواع من أفخر المشاوي على الفحم: تكة، كباب، طاووق، ريش، دجاج.',cta:'المميز | من 25 درهم'},
-  {ico:'🫕',ar:'حمص بيروتي',en:'Hommos Beiruty',
-   desc:'حمص طازج مع الزيت والكمون والبقدونس على الطريقة البيروتية الأصيلة.',cta:'مقبلات يومية | 15 درهم'},
-  {ico:'🍖',ar:'كباب حلبي',en:'Kabab Halabi',
-   desc:'كباب حلبي مشوي بتوابل بيت وبهارات حلبية، يُقدَّم مع الأرز والسلطة.',cta:'من أشهر أطباقنا ⭐ | 26 درهم'},
-  {ico:'🐟',ar:'سمك شعري مشوي',en:'Grilled Shaeri Fish',
-   desc:'سمك شعري طازج مشوي مع الليمون والثوم والأعشاب.',cta:'مأكولات بحرية | 35 درهم'},
-  {ico:'🫔',ar:'شاورما دجاج',en:'Chicken Shawarma',
-   desc:'شاورما دجاج لبنانية أو مكسيكية بصوص الأوبرج السري وخضار طازجة.',cta:'الأوفر! | 6 دراهم فقط 🔥'},
-  {ico:'🥗',ar:'تبولة طازجة',en:'Tabouleh',
-   desc:'تبولة بقدونس طازج مع الطماطم والبصل والليمون وزيت الزيتون.',cta:'مقبلات | 14 درهم'},
-  {ico:'🍕',ar:'بيتزا بحرية',en:'Seafood Pizza',
-   desc:'بيتزا بروبيان وأسماك مع جبن موزاريلا وصوص الطماطم الخاص.',cta:'بيتزا طازجة | 30 درهم'},
-  {ico:'🥙',ar:'فطيرة شاورما',en:'Shawarma Pie',
-   desc:'خبز مقرمش محشو بالشاورما والخضار والصوصات مشوي على الطاوة.',cta:'مميز وشهي | 18 درهم'},
-  {ico:'🍗',ar:'دجاج مسحب على الفحم',en:'Boneless Charcoal Chicken',
-   desc:'دجاجة مسحبة كاملة مشوية على الفحم بالتوابل الخاصة.',cta:'الأشهر في المطعم | 35 درهم'},
-  {ico:'🥩',ar:'ستيك بالفلفل الأسود',en:'Black Pepper Steak',
-   desc:'ستيك طري بصوص الفلفل الأسود الكريمي مع البطاطا ويدجز.',cta:'خصائص الأوبرج | 36 درهم'},
-  {ico:'🍜',ar:'فتة بالشاورما',en:'Fatteh Shawarma',
-   desc:'خبز مقرمش مع اللبن والحمص والشاورما وصوص الثوم.',cta:'طبق مميز | 25 درهم'},
-  {ico:'🍰',ar:'أم علي',en:'Umm Ali',
-   desc:'حلوى أم علي الشهية بالقشطة والمكسرات والزبيب.',cta:'حلويات شرقية | 14 درهم'},
-  {ico:'🥙',ar:'مناقيش جبنة',en:'Cheese Manakish',
-   desc:'مناقيش جبنة طازجة على الصاج أو الفرن.',cta:'فطور وعشاء | 7 دراهم'},
-  {ico:'🦐',ar:'روبيان بروفنسال',en:'Provencial Shrimps',
-   desc:'روبيان طازج بالصوص البروفنسالي الكريمي مع الأرز.',cta:'مأكولات بحرية | 45 درهم'},
+  {photo:'soup',    ar:'شوربة عدس',              en:'Lentil Soup',
+   desc:'شوربة عدس طازجة ساخنة بالليمون والكمون والبقدونس.',
+   cat:'الشوربات', cta:'متوفرة يومياً | 8 دراهم'},
+  {photo:'salad',   ar:'تبولة طازجة',             en:'Tabouleh',
+   desc:'تبولة بقدونس طازج، طماطم، بصل، ليمون وزيت زيتون على الطريقة اللبنانية.',
+   cat:'المقبلات', cta:'مقبلات يومية | 14 درهم'},
+  {photo:'breakfast', ar:'فتة بالسمنة',           en:'Fatteh With Ghee',
+   desc:'فتة لبنانية أصيلة بالخبز المقرمش واللبن والحمص والسمنة.',
+   cat:'وجبة الإفطار', cta:'إفطار كامل | 17 درهم'},
+  {photo:'grill',   ar:'دجاج مشوي على الفحم',     en:'Charcoal Grilled Chicken',
+   desc:'دجاجة كاملة مشوية على الفحم بالتوابل السرية تُقدَّم مع الثوم والخضار.',
+   cat:'المشاوي', cta:'الأشهر في المطعم | 34 درهم'},
+  {photo:'crispy',  ar:'دجاج كريسبي مقرمش',       en:'Crocket Chicken',
+   desc:'دجاج مقرمش مقلي بالتوابل مع صوص خاص وبطاطا.',
+   cat:'خصائص الأوبرج', cta:'مميز ولذيذ | 25 درهم'},
+  {photo:'arayes',  ar:'عرايس لحم على الطاوة',    en:'Meat Arayes',
+   desc:'خبز مقرمش محشو باللحم المفروم والبهارات مشوي على الطاوة.',
+   cat:'المشاوي', cta:'شهي جداً | 22 درهم'},
+  {photo:'pastries', ar:'فطائر ومعجنات',           en:'Pastries',
+   desc:'فطائر جبن، سبانخ، لحم ومعجنات طازجة يومياً من فرن الأوبرج.',
+   cat:'المعجنات', cta:'طازجة كل يوم | من 5 دراهم'},
+  {photo:'shrimps', ar:'روبيان بروفنسال',          en:'Provencial Shrimps',
+   desc:'روبيان طازج بصوص البروفنسال الكريمي مع الثوم والأعشاب.',
+   cat:'مأكولات بحرية', cta:'أسماك يومية | 45 درهم'},
+  {photo:'dessert', ar:'محلبية بالورد والفستق',    en:'Mohallabiah',
+   desc:'محلبية ناعمة بماء الورد مزيّنة بالفستق الحلبي وبتلات الورد.',
+   cat:'الحلويات', cta:'حلويات شرقية | 7 دراهم'},
+  {photo:'shawarma', ar:'شاورما دجاج لبنانية',    en:'Chicken Shawarma',
+   desc:'شاورما دجاج لبنانية أو مكسيكية بصوص الأوبرج السري وخضار طازجة.',
+   cat:'الشاورما', cta:'الأوفر! | 6 دراهم فقط 🔥'},
+  {photo:'falafel', ar:'فلافل عربي طازج',          en:'Arabic Falafel',
+   desc:'فلافل عربي طازج محضّر يومياً بالحمص والفول والأعشاب.',
+   cat:'السندويشات', cta:'لذيذ وطازج | 6 دراهم'},
+  {photo:'ricemeat', ar:'أرز ولحم مشوي',           en:'Rice & Grilled Meat',
+   desc:'أرز بالشعيرية مع لحم مشوي على الفحم — وجبة متكاملة شهية.',
+   cat:'المشاوي', cta:'وجبة كاملة | من 25 درهم'},
+  {photo:'burger',  ar:'برجر الأوبرج الخاص',       en:'Al Oberge Burger',
+   desc:'برجر الأوبرج بلحم طازج مع الجبن والخضار وصوص بيت خاص.',
+   cat:'السندويشات', cta:'برجر مميز | 17 درهم'},
 ];
 
 const TICKERS=[
@@ -580,7 +746,18 @@ window.addEventListener('load',()=>{
   const fill=setInterval(()=>{
     p=Math.min(p+(Math.random()*12+5),100);
     bar.style.width=p+'%';
-    if(p>=100){ clearInterval(fill); setTimeout(()=>{ goScreen('welcomeScreen'); buildTicker(); },400); }
+    if(p>=100){
+      clearInterval(fill);
+      setTimeout(()=>{
+        buildTicker();
+        // Check if already followed this session
+        const alreadyFollowed = sessionStorage.getItem('oberge_followed');
+        goScreen(alreadyFollowed ? 'welcomeScreen' : 'followScreen');
+        if(alreadyFollowed){
+          document.getElementById('followBadges').style.display='block';
+        }
+      },400);
+    }
   },80);
 });
 
@@ -599,6 +776,45 @@ function goLB(){
   goScreen('lbScreen');
 }
 
+// ─── SOCIAL FOLLOW LOGIC ──────────────────────────────────────────
+const FOLLOW_STATE = { tiktok: false, insta: false };
+
+function markFollow(platform) {
+  // Small delay so the link opens first
+  setTimeout(() => {
+    FOLLOW_STATE[platform] = true;
+    const chk = document.getElementById('chk' + (platform === 'tiktok' ? 'Tiktok' : 'Insta'));
+    const btn = document.getElementById('btn' + (platform === 'tiktok' ? 'Tiktok' : 'Insta'));
+    if (chk) chk.classList.add('done');
+    if (btn) btn.style.opacity = '0.75';
+    checkBothFollowed();
+  }, 1200);
+}
+
+function checkBothFollowed() {
+  const btnStart = document.getElementById('btnStartNow');
+  if (FOLLOW_STATE.tiktok && FOLLOW_STATE.insta) {
+    btnStart.classList.add('ready');
+    btnStart.textContent = '🚀 ممتاز! ابدأ اللعبة الآن';
+    sessionStorage.setItem('oberge_followed', '1');
+  } else if (FOLLOW_STATE.tiktok || FOLLOW_STATE.insta) {
+    btnStart.textContent = '⏳ تابع الصفحة الأخرى أيضاً...';
+  }
+}
+
+function goToRegister() {
+  // Show the followed badge
+  document.getElementById('followBadges').style.display = 'block';
+  goScreen('welcomeScreen');
+}
+
+function skipFollow() {
+  // Allow skip but flag as not followed
+  sessionStorage.setItem('oberge_followed', '0');
+  document.getElementById('followBadges').style.display = 'none';
+  goScreen('welcomeScreen');
+}
+
 // ─── GAME INIT ────────────────────────────────────────────────────
 function initGame(){
   G.name=document.getElementById('pName').value.trim()||'ضيف';
@@ -610,7 +826,14 @@ function initGame(){
 
   // Save customer if consented
   if(document.getElementById('pConsent').checked && G.phone){
-    G.customers.push({name:G.name,phone:G.phone,date:new Date().toLocaleDateString('ar-AE')});
+    const followed = sessionStorage.getItem('oberge_followed') === '1';
+    G.customers.push({
+      name:G.name, phone:G.phone,
+      date:new Date().toLocaleDateString('ar-AE'),
+      tiktok: FOLLOW_STATE.tiktok,
+      insta:  FOLLOW_STATE.insta,
+      followed: followed
+    });
     localStorage.setItem('oberge_customers',JSON.stringify(G.customers.slice(-200)));
   }
 
@@ -830,11 +1053,18 @@ function spawnNewBall(){
 function showDishAd(){
   pauseGame();
   const d=MENU[Math.floor(Math.random()*MENU.length)];
-  document.getElementById('dIcon').textContent=d.ico;
-  document.getElementById('dAr').textContent=d.ar;
-  document.getElementById('dEn').textContent=d.en;
-  document.getElementById('dDesc').textContent=d.desc;
-  document.getElementById('dCta').textContent=d.cta;
+  // Real photo from menu
+  const photoSrc = (typeof DISH_PHOTOS !== 'undefined' && DISH_PHOTOS[d.photo])
+    ? DISH_PHOTOS[d.photo]
+    : '';
+  const photoEl = document.getElementById('dPhoto');
+  if(photoSrc){ photoEl.src=photoSrc; photoEl.style.display='block'; }
+  else { photoEl.style.display='none'; }
+  document.getElementById('dBadge').textContent = d.cat;
+  document.getElementById('dAr').textContent  = d.ar;
+  document.getElementById('dEn').textContent  = d.en;
+  document.getElementById('dDesc').textContent = d.desc;
+  document.getElementById('dCta').textContent  = d.cta;
   document.getElementById('dishAd').classList.add('show');
 }
 function closeDishAd(){
