@@ -1,0 +1,17 @@
+{
+  "name": "مطعم الأوبرج - تحدي كأس العالم",
+  "short_name": "الأوبرج ⚽",
+  "description": "لعبة كرة قدم تفاعلية من مطعم الأوبرج - تحدي كأس العالم",
+  "start_url": "/index.html",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "theme_color": "#1a0a00",
+  "background_color": "#0d0d0d",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "icons/icon-192.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ],
+  "categories": ["games", "entertainment", "food"]
+}

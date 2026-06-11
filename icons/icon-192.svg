@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="30" fill="#1a0a00"/>
+  <circle cx="96" cy="75" r="52" fill="none" stroke="#c8102e" stroke-width="4" opacity=".5"/>
+  <text x="96" y="68" font-size="58" text-anchor="middle" dominant-baseline="middle">⚽</text>
+  <text x="96" y="130" font-size="22" text-anchor="middle" fill="#f5c518" font-family="Arial" font-weight="900">الأوبرج</text>
+  <text x="96" y="158" font-size="13" text-anchor="middle" fill="rgba(255,255,255,.6)" font-family="Arial">AL OBERGE</text>
+</svg>

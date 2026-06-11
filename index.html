@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#1a0a00">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="الأوبرج ⚽">
+<meta name="description" content="تحدي كأس العالم من مطعم الأوبرج - العب وربح كوبونات خصم!">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon.svg">
+<title>مطعم الأوبرج | تحدي كأس العالم ⚽</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#c8102e;--dred:#8b0a1e;--gold:#f5c518;--dgold:#c9980a;
+  --black:#0d0d0d;--dark:#1a0a00;--green:#006633;--dgreen:#004422;
+  --white:#f8f4e8;--cream:#f0e6cc;--gray:#2a2a2a;
+  --ar:'Tajawal',sans-serif;--en:'Bebas Neue',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--dark);font-family:var(--ar);touch-action:none;user-select:none;}
+#app{width:100vw;height:100vh;position:relative;overflow:hidden;}
+
+/* SCREENS */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .4s ease;overflow-y:auto;overflow-x:hidden;padding:12px 16px;}
+.screen.active{opacity:1;pointer-events:all;}
+
+/* BACKGROUND */
+#bgLayer{position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse 80% 50% at 50% 0%,#0d3b0d,transparent),
+  radial-gradient(ellipse 60% 40% at 50% 100%,#1a0000,transparent),
+  linear-gradient(170deg,#071a07 0%,#1a0a00 45%,#080808 100%);}
+#starsCanvas{position:fixed;inset:0;z-index:1;pointer-events:none;}
+
+/* WELCOME */
+#welcomeScreen{z-index:10;gap:0;}
+.logo-wrap{position:relative;margin-bottom:6px;text-align:center;}
+.logo-ring{
+  width:130px;height:130px;border-radius:50%;margin:0 auto 8px;
+  background:radial-gradient(circle,rgba(200,16,46,.25) 0%,transparent 70%);
+  border:2px solid rgba(200,16,46,.35);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 30px rgba(200,16,46,.3),0 0 80px rgba(200,16,46,.1);
+  animation:pulseRing 2.5s infinite;}
+@keyframes pulseRing{0%,100%{box-shadow:0 0 25px rgba(200,16,46,.3),0 0 60px rgba(200,16,46,.1);}
+  50%{box-shadow:0 0 50px rgba(200,16,46,.6),0 0 120px rgba(200,16,46,.2);}}
+.logo-img{width:108px;height:108px;object-fit:contain;
+  filter:drop-shadow(0 4px 14px rgba(200,16,46,.65));
+  animation:float 3s ease-in-out infinite;}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+.logo-fallback{font-size:50px;text-align:center;line-height:1;}
+.logo-fallback-name{font-size:12px;color:var(--gold);font-weight:900;margin-top:3px;}
+
+.wtitle{font-family:var(--en);font-size:clamp(26px,7.5vw,46px);color:var(--gold);
+  letter-spacing:4px;text-shadow:0 0 30px rgba(245,197,24,.5),2px 2px 0 rgba(0,0,0,.8);line-height:1;}
+.wsub{font-size:clamp(15px,4.2vw,21px);color:var(--white);font-weight:900;margin:4px 0;
+  text-shadow:1px 1px 4px rgba(0,0,0,.8);}
+.wtag{font-size:clamp(10px,2.6vw,13px);color:var(--cream);opacity:.8;margin-bottom:2px;}
+
+.ribbon{
+  background:linear-gradient(135deg,var(--red),var(--dred));
+  border:1px solid rgba(245,197,24,.35);border-radius:8px;
+  padding:7px 16px;margin:8px 0;font-size:clamp(9px,2.5vw,12px);
+  color:var(--gold);font-weight:700;text-align:center;
+  box-shadow:0 4px 18px rgba(200,16,46,.35);max-width:340px;width:100%;}
+
+.form-group{width:100%;max-width:340px;margin:5px auto;}
+.flabel{font-size:12px;color:var(--gold);margin-bottom:4px;font-weight:700;display:block;}
+.finput{
+  width:100%;padding:11px 14px;
+  background:rgba(255,255,255,.06);border:2px solid rgba(245,197,24,.25);
+  border-radius:10px;color:var(--white);font-family:var(--ar);
+  font-size:14px;font-weight:700;outline:none;transition:border-color .3s;text-align:right;}
+.finput:focus{border-color:var(--gold);}
+.finput::placeholder{color:rgba(255,255,255,.35);}
+
+.consent-row{display:flex;align-items:center;gap:10px;max-width:340px;width:100%;margin:4px 0;}
+.chk{width:18px;height:18px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;}
+.clabel{font-size:11px;color:rgba(255,255,255,.65);}
+
+.btn{
+  width:100%;max-width:340px;padding:14px;margin:5px 0;border:none;border-radius:12px;
+  font-family:var(--ar);font-size:17px;font-weight:900;cursor:pointer;
+  transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden;}
+.btn:active{transform:scale(.97);}
+.btn-red{
+  background:linear-gradient(135deg,#e8001f,var(--red),var(--dred));color:var(--white);
+  box-shadow:0 8px 28px rgba(200,16,46,.45),inset 0 1px 0 rgba(255,255,255,.18);}
+.btn-red::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.12) 0%,transparent 50%);}
+.btn-gold{
+  background:rgba(245,197,24,.1);border:2px solid rgba(245,197,24,.35);
+  color:var(--gold);font-size:14px;padding:11px;}
+.btn-wa{
+  background:linear-gradient(135deg,#25d366,#128c47);color:#fff;
+  box-shadow:0 6px 20px rgba(37,211,102,.35);display:flex;align-items:center;justify-content:center;gap:8px;}
+
+.footer-info{margin-top:10px;font-size:10px;color:rgba(255,255,255,.35);text-align:center;line-height:1.7;}
+
+/* GAME SCREEN */
+#gameScreen{z-index:10;padding:0;}
+#gameCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;}
+
+/* HUD */
+.hud{
+  position:absolute;top:0;left:0;right:0;z-index:20;
+  padding:max(8px,env(safe-area-inset-top)) 12px 8px;
+  background:linear-gradient(180deg,rgba(0,0,0,.9) 0%,transparent 100%);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.hud-brand{display:flex;flex-direction:column;align-items:flex-start;gap:2px;}
+.hud-logo{height:34px;object-fit:contain;filter:brightness(1.15);}
+.hud-logo-text{font-size:10px;color:var(--gold);font-weight:900;line-height:1.2;}
+.hud-box{
+  text-align:center;border-radius:10px;padding:3px 12px;
+  background:rgba(0,0,0,.4);border:1px solid rgba(245,197,24,.3);}
+.hud-box.red-box{background:rgba(200,16,46,.25);border-color:rgba(245,197,24,.3);}
+.hud-box.green-box{background:rgba(0,102,51,.25);border-color:rgba(0,200,100,.3);}
+.hlabel{font-size:9px;color:var(--gold);font-weight:700;line-height:1;}
+.hval{font-family:var(--en);font-size:30px;color:var(--white);line-height:1;}
+.hval.urgent{color:var(--red);animation:urgBlink .45s infinite;}
+@keyframes urgBlink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.hud-goals-box{display:flex;flex-direction:column;align-items:center;}
+.hud-goals-val{font-family:var(--en);font-size:20px;color:var(--white);}
+.hud-goals-label{font-size:8px;color:rgba(255,255,255,.6);font-weight:700;}
+
+/* TICKER */
+.ticker-bar{
+  position:absolute;bottom:0;left:0;right:0;z-index:20;
+  background:linear-gradient(0deg,rgba(0,0,0,.85) 0%,transparent 100%);
+  padding:5px 0;overflow:hidden;}
+.ticker-inner{
+  display:flex;align-items:center;gap:0;
+  animation:tick 25s linear infinite;}
+.ticker-sep{color:var(--red);margin:0 16px;font-size:16px;}
+.ticker-item{font-size:clamp(10px,2.6vw,12px);color:var(--gold);font-weight:700;white-space:nowrap;}
+@keyframes tick{0%{transform:translateX(100vw);}100%{transform:translateX(-100%);}}
+
+/* POWER BAR */
+#powerWrap{
+  position:absolute;left:50%;transform:translateX(-50%);
+  bottom:60px;z-index:25;text-align:center;pointer-events:none;
+  opacity:0;transition:opacity .2s;}
+#powerWrap.visible{opacity:1;}
+.power-label{font-size:10px;color:var(--gold);font-weight:700;margin-bottom:4px;}
+.power-track{width:160px;height:10px;background:rgba(0,0,0,.5);border-radius:5px;
+  border:1px solid rgba(255,255,255,.15);overflow:hidden;margin:0 auto;}
+#powerFill{height:100%;width:0%;border-radius:5px;
+  transition:background .15s;
+  background:linear-gradient(90deg,#00cc44,#f5c518);}
+
+/* GOAL POPUP */
+#goalPop{
+  position:absolute;inset:0;z-index:50;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;opacity:0;transition:opacity .15s;}
+#goalPop.show{opacity:1;}
+.goal-blast{text-align:center;}
+.goal-txt{
+  font-size:clamp(60px,18vw,96px);font-weight:900;color:var(--gold);
+  text-shadow:0 0 50px rgba(245,197,24,.9),4px 4px 0 var(--red),8px 8px 0 rgba(0,0,0,.5);
+  animation:goalPop .35s ease-out;line-height:.9;}
+.goal-pts{
+  font-family:var(--en);font-size:clamp(18px,5vw,28px);
+  color:var(--white);letter-spacing:3px;
+  text-shadow:2px 2px 0 rgba(0,0,0,.8);}
+.goal-streak{font-size:14px;color:#ff8800;font-weight:900;}
+@keyframes goalPop{0%{transform:scale(.25) rotate(-8deg);opacity:0;}
+  65%{transform:scale(1.12) rotate(3deg);}100%{transform:scale(1) rotate(0);opacity:1;}}
+
+/* SAVED POPUP */
+#savedPop{
+  position:absolute;inset:0;z-index:48;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;opacity:0;transition:opacity .15s;}
+#savedPop.show{opacity:1;}
+.saved-txt{
+  font-size:clamp(40px,14vw,72px);font-weight:900;color:#ff4444;
+  text-shadow:0 0 30px rgba(255,68,68,.7),3px 3px 0 rgba(0,0,0,.8);
+  animation:goalPop .3s ease-out;}
+
+/* MODAL BASE */
+.modal-bg{
+  position:absolute;inset:0;z-index:60;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.88);
+  opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-bg.show{opacity:1;pointer-events:all;}
+.modal-card{
+  background:linear-gradient(155deg,#1f0900,#0d0d0d);
+  border:2px solid var(--gold);border-radius:20px;
+  padding:24px 20px;max-width:320px;width:92%;text-align:center;
+  box-shadow:0 0 60px rgba(245,197,24,.2);
+  animation:cardIn .4s ease-out;}
+@keyframes cardIn{from{transform:scale(.45);opacity:0;}to{transform:scale(1);opacity:1;}}
+.m-emoji{font-size:64px;margin-bottom:8px;display:block;}
+.m-title{font-size:21px;font-weight:900;color:var(--gold);margin-bottom:8px;}
+.m-body{font-size:13px;color:var(--cream);line-height:1.65;margin-bottom:14px;white-space:pre-line;}
+.coupon-box{
+  background:rgba(245,197,24,.1);border:2px dashed var(--gold);
+  border-radius:10px;padding:9px 12px;margin:8px 0;
+  font-family:var(--en);font-size:26px;letter-spacing:5px;
+  color:var(--gold);font-weight:700;}
+
+/* DISH AD */
+#dishAd{z-index:65;}
+.dish-icon{font-size:80px;margin-bottom:8px;display:block;}
+.dish-ar{font-size:22px;font-weight:900;color:var(--gold);}
+.dish-en{font-size:13px;color:var(--cream);margin-bottom:8px;font-style:italic;}
+.dish-desc{font-size:12px;color:rgba(255,255,255,.75);line-height:1.6;margin-bottom:10px;}
+.dish-cta{
+  font-size:12px;color:var(--gold);font-weight:700;
+  background:rgba(245,197,24,.1);border:1px solid rgba(245,197,24,.3);
+  border-radius:8px;padding:7px 12px;margin-bottom:12px;display:block;}
+
+/* COUNTDOWN */
+#countdownPop{
+  position:absolute;inset:0;z-index:55;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.75);pointer-events:none;}
+.countdown-num{
+  font-family:var(--en);font-size:clamp(100px,28vw,160px);color:var(--gold);
+  text-shadow:0 0 60px rgba(245,197,24,.8),4px 4px 0 rgba(0,0,0,.6);
+  animation:countPop .8s ease-out;}
+@keyframes countPop{0%{transform:scale(2);opacity:0;}100%{transform:scale(1);opacity:1;}}
+
+/* RESULTS */
+#resultsScreen{z-index:10;}
+.result-card{
+  background:linear-gradient(160deg,#1f0900,#0d0d0d);
+  border:2px solid rgba(245,197,24,.45);border-radius:20px;
+  padding:22px 18px;max-width:380px;width:100%;
+  box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 40px rgba(245,197,24,.08);text-align:center;}
+.r-trophy{font-size:62px;animation:float 2s ease-in-out infinite;display:block;margin-bottom:4px;}
+.r-player-lbl{font-size:12px;color:var(--gold);font-weight:700;}
+.r-name{font-size:21px;color:var(--white);font-weight:900;margin-bottom:12px;}
+.score-circle{
+  width:125px;height:125px;border-radius:50%;
+  background:radial-gradient(circle,rgba(200,16,46,.25),rgba(0,0,0,.5));
+  border:3px solid var(--gold);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  margin:0 auto 14px;box-shadow:0 0 40px rgba(245,197,24,.25);}
+.score-num{font-family:var(--en);font-size:52px;color:var(--gold);line-height:1;
+  text-shadow:0 0 20px rgba(245,197,24,.5);}
+.score-lbl{font-size:11px;color:var(--cream);font-weight:700;}
+.rank-badge{
+  display:inline-block;padding:5px 18px;border-radius:20px;
+  font-size:15px;font-weight:900;margin-bottom:12px;}
+.r1{background:linear-gradient(135deg,#ffd700,#e6a800);color:#000;}
+.r2{background:linear-gradient(135deg,#d0d0d0,#a0a0a0);color:#000;}
+.r3{background:linear-gradient(135deg,#cd7f32,#9a5a1a);color:#fff;}
+.rn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;}
+.r-goals{font-size:14px;color:var(--cream);margin-bottom:8px;}
+.r-coupon-wrap{margin-bottom:10px;}
+.r-actions{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+
+/* LEADERBOARD */
+#lbScreen{z-index:10;}
+.lb-head{text-align:center;margin-bottom:16px;}
+.lb-en-title{font-family:var(--en);font-size:38px;color:var(--gold);letter-spacing:3px;
+  text-shadow:0 0 20px rgba(245,197,24,.4);}
+.lb-ar-title{font-size:13px;color:var(--cream);font-weight:700;}
+.lb-scroll{width:100%;max-width:380px;display:flex;flex-direction:column;gap:7px;
+  max-height:52vh;overflow-y:auto;padding-right:2px;}
+.lb-row{
+  background:rgba(255,255,255,.04);border:1px solid rgba(245,197,24,.15);
+  border-radius:12px;padding:10px 14px;
+  display:flex;align-items:center;gap:10px;}
+.lb-row.lbr1{background:rgba(255,215,0,.08);border-color:#ffd700;}
+.lb-row.lbr2{background:rgba(192,192,192,.08);border-color:#c0c0c0;}
+.lb-row.lbr3{background:rgba(205,127,50,.08);border-color:#cd7f32;}
+.lb-rank{font-family:var(--en);font-size:22px;font-weight:700;min-width:28px;text-align:center;}
+.lbrc1{color:#ffd700;}.lbrc2{color:#c0c0c0;}.lbrc3{color:#cd7f32;}.lbrcn{color:rgba(255,255,255,.45);}
+.lb-info{flex:1;}
+.lb-name{font-size:14px;color:var(--white);font-weight:700;}
+.lb-meta{font-size:10px;color:rgba(255,255,255,.4);}
+.lb-score{font-family:var(--en);font-size:26px;color:var(--gold);font-weight:700;}
+.lb-empty{text-align:center;padding:36px 20px;color:rgba(255,255,255,.4);font-size:14px;line-height:1.8;}
+
+/* LOADING */
+#loadScreen{z-index:200;background:var(--dark);gap:12px;}
+.ld-ball{font-size:76px;animation:spinBall 1s linear infinite;}
+@keyframes spinBall{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+.ld-title{font-family:var(--en);font-size:clamp(22px,6vw,32px);color:var(--gold);letter-spacing:4px;}
+.ld-sub{font-size:13px;color:rgba(255,255,255,.5);}
+.ld-bar-wrap{width:220px;height:7px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden;}
+.ld-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--red),var(--gold));
+  border-radius:4px;transition:width .1s;}
+.ld-tip{font-size:11px;color:rgba(255,255,255,.4);text-align:center;max-width:280px;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-thumb{background:rgba(245,197,24,.25);border-radius:2px;}
+@media(max-height:620px){.logo-ring{width:100px;height:100px;}.logo-img{width:86px;height:86px;}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="bgLayer"></div>
+  <canvas id="starsCanvas"></canvas>
+
+  <!-- LOADING -->
+  <div class="screen active" id="loadScreen">
+    <span class="ld-ball">⚽</span>
+    <div class="ld-title">AL OBERGE</div>
+    <div class="ld-sub" style="font-size:14px;color:var(--gold);font-weight:900;">مطعم الأوبرج</div>
+    <div class="ld-sub">World Cup Challenge ⚽</div>
+    <div class="ld-bar-wrap"><div class="ld-bar" id="ldBar"></div></div>
+    <div class="ld-sub">جارٍ تحضير الملعب...</div>
+    <div class="ld-tip">أشهى المأكولات العربية والغربية والمشاوي</div>
+  </div>
+
+  <!-- WELCOME -->
+  <div class="screen" id="welcomeScreen">
+    <div class="logo-wrap">
+      <div class="logo-ring">
+        <img src="oberge-logo.png" class="logo-img" id="wLogo" alt="Al Oberge"
+             onerror="this.style.display='none';document.getElementById('wLogoFb').style.display='flex'">
+        <div id="wLogoFb" style="display:none;flex-direction:column;align-items:center;">
+          <div class="logo-fallback">🍽️</div>
+          <div class="logo-fallback-name">مطعم الأوبرج</div>
+        </div>
+      </div>
+      <div class="wtitle">WORLD CUP<br>CHALLENGE</div>
+      <div class="wsub">تحدي كأس العالم 🏆</div>
+      <div class="wtag">أشهى المأكولات العربية والغربية والمشاوي</div>
+    </div>
+    <div class="ribbon">⚽ سدد الكرات × 60 ثانية × اجمع النقاط × اربح كوبونات خصم ⚽</div>
+    <div class="form-group">
+      <label class="flabel">اسمك اللاعب</label>
+      <input class="finput" id="pName" type="text" placeholder="أدخل اسمك هنا..." maxlength="22">
+    </div>
+    <div class="form-group">
+      <label class="flabel">رقم الهاتف (اختياري — للسحب الشهري)</label>
+      <input class="finput" id="pPhone" type="tel" placeholder="05xxxxxxxx" maxlength="15" dir="ltr">
+    </div>
+    <div class="consent-row">
+      <input type="checkbox" class="chk" id="pConsent">
+      <label class="clabel" for="pConsent">أوافق على المشاركة في السحب الشهري على جوائز مطعم الأوبرج</label>
+    </div>
+    <button class="btn btn-red" onclick="initGame()">🚀 ابدأ اللعبة!</button>
+    <button class="btn btn-gold" onclick="goLB()">🏆 لوحة أبطال الأوبرج</button>
+    <div class="footer-info">
+      UAQ: 06 7666 551 / 06 5223 396 &nbsp;|&nbsp; Salama: 06 5953 095<br>
+      WhatsApp: 055 2214 107 &nbsp;|&nbsp; 056 6010 095
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div class="screen" id="gameScreen">
+    <canvas id="gameCanvas"></canvas>
+    <!-- HUD -->
+    <div class="hud">
+      <div class="hud-brand">
+        <img src="oberge-logo.png" class="hud-logo" id="hLogo" alt="AL"
+             onerror="this.style.display='none';document.getElementById('hLogoTxt').style.display='block'">
+        <div id="hLogoTxt" class="hud-logo-text" style="display:none;">مطعم<br>الأوبرج</div>
+      </div>
+      <div class="hud-box red-box">
+        <div class="hlabel">النقاط</div>
+        <div class="hval" id="hScore">0</div>
+      </div>
+      <div class="hud-box green-box">
+        <div class="hlabel">الوقت</div>
+        <div class="hval" id="hTimer">60</div>
+      </div>
+      <div class="hud-goals-box">
+        <div class="hud-goals-val" id="hGoals">0</div>
+        <div class="hud-goals-label">أهداف</div>
+      </div>
+    </div>
+    <!-- TICKER -->
+    <div class="ticker-bar">
+      <div class="ticker-inner" id="ticker"></div>
+    </div>
+    <!-- POWER BAR -->
+    <div id="powerWrap">
+      <div class="power-label">قوة التسديد</div>
+      <div class="power-track"><div id="powerFill"></div></div>
+    </div>
+    <!-- GOAL POPUP -->
+    <div id="goalPop">
+      <div class="goal-blast">
+        <div class="goal-txt" id="gTxt">هدف!</div>
+        <div class="goal-pts" id="gPts">+10</div>
+        <div class="goal-streak" id="gStreak"></div>
+      </div>
+    </div>
+    <!-- SAVED POPUP -->
+    <div id="savedPop"><div class="saved-txt">صده! 🧤</div></div>
+    <!-- COUNTDOWN -->
+    <div id="countdownPop" style="display:none;">
+      <div class="countdown-num" id="cdNum">3</div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="screen" id="resultsScreen">
+    <div class="result-card">
+      <span class="r-trophy" id="rEmoji">🏆</span>
+      <div class="r-player-lbl">اللاعب</div>
+      <div class="r-name" id="rName">-</div>
+      <div class="score-circle">
+        <div class="score-num" id="rScore">0</div>
+        <div class="score-lbl">نقطة</div>
+      </div>
+      <div id="rRank" class="rank-badge rn">المركز #1</div>
+      <div class="r-goals" id="rGoals">⚽ 0 هدف</div>
+      <div class="r-coupon-wrap" id="rCouponWrap" style="display:none;">
+        <div style="font-size:12px;color:var(--cream);margin-bottom:4px;">🎁 كوبون خصمك الخاص</div>
+        <div class="coupon-box" id="rCoupon">OBR20</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);">أبرزه عند الطلب في المطعم</div>
+      </div>
+      <div class="r-actions">
+        <button class="btn btn-wa" onclick="waShare()">📲 شارك على واتساب</button>
+        <button class="btn btn-red" onclick="initGame()">🔄 العب مجدداً</button>
+        <button class="btn btn-gold" onclick="goLB()">🏆 لوحة الأبطال</button>
+        <button class="btn btn-gold" onclick="goScreen('welcomeScreen')">🏠 الرئيسية</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div class="screen" id="lbScreen">
+    <div class="lb-head">
+      <div class="lb-en-title">TOP SCORES</div>
+      <div class="lb-ar-title">🏆 أبطال مطعم الأوبرج 🏆</div>
+    </div>
+    <div class="lb-scroll" id="lbList"></div>
+    <div style="width:100%;max-width:380px;display:flex;flex-direction:column;gap:8px;margin-top:14px;">
+      <button class="btn btn-red" onclick="initGame()">⚽ العب الآن</button>
+      <button class="btn btn-gold" onclick="goScreen('welcomeScreen')">🏠 الرئيسية</button>
+    </div>
+  </div>
+
+  <!-- MILESTONE MODAL -->
+  <div class="modal-bg" id="msModal">
+    <div class="modal-card">
+      <span class="m-emoji" id="msEmoji">🎉</span>
+      <div class="m-title" id="msTitle">إنجاز!</div>
+      <div class="m-body" id="msBody"></div>
+      <div class="coupon-box" id="msCoupon" style="display:none;"></div>
+      <button class="btn btn-red" onclick="closeMilestone()" style="max-width:100%;margin-top:4px;">
+        ⚽ متابعة اللعب
+      </button>
+    </div>
+  </div>
+
+  <!-- DISH AD MODAL -->
+  <div class="modal-bg" id="dishAd">
+    <div class="modal-card">
+      <span class="dish-icon" id="dIcon">🍖</span>
+      <div class="dish-ar" id="dAr">-</div>
+      <div class="dish-en" id="dEn">-</div>
+      <div class="dish-desc" id="dDesc">-</div>
+      <span class="dish-cta" id="dCta">-</span>
+      <button class="btn btn-red" onclick="closeDishAd()" style="max-width:100%;">⚽ متابعة اللعب</button>
+    </div>
+  </div>
+
+  <canvas id="confetti"></canvas>
+</div>
+
+<script>
+/* ================================================================
+   AL OBERGE RESTAURANT — WORLD CUP CHALLENGE
+   Full Game Engine + PWA
+   ================================================================ */
+
+// ─── STARS ───────────────────────────────────────────────────────
+(function(){
+  const c = document.getElementById('starsCanvas');
+  c.width  = window.innerWidth;
+  c.height = window.innerHeight;
+  const x  = c.getContext('2d');
+  const stars = Array.from({length:80},()=>({
+    px:Math.random()*c.width, py:Math.random()*c.height,
+    r:Math.random()*1.4+.3, alpha:Math.random(),
+    speed:Math.random()*.006+.002
+  }));
+  (function loop(){
+    x.clearRect(0,0,c.width,c.height);
+    stars.forEach(s=>{
+      s.alpha += s.speed;
+      if(s.alpha>1||s.alpha<0) s.speed*=-1;
+      x.beginPath();
+      x.arc(s.px,s.py,s.r,0,Math.PI*2);
+      x.fillStyle=`rgba(245,197,24,${Math.abs(s.alpha).toFixed(2)})`;
+      x.fill();
+    });
+    requestAnimationFrame(loop);
+  })();
+  window.addEventListener('resize',()=>{ c.width=window.innerWidth; c.height=window.innerHeight; });
+})();
+
+// ─── MENU DATA ───────────────────────────────────────────────────
+const MENU=[
+  {ico:'🥩',ar:'مشاوي الأوبرج الخاصة',en:'Al Oberge Special Grill',
+   desc:'5 أنواع من أفخر المشاوي على الفحم: تكة، كباب، طاووق، ريش، دجاج.',cta:'المميز | من 25 درهم'},
+  {ico:'🫕',ar:'حمص بيروتي',en:'Hommos Beiruty',
+   desc:'حمص طازج مع الزيت والكمون والبقدونس على الطريقة البيروتية الأصيلة.',cta:'مقبلات يومية | 15 درهم'},
+  {ico:'🍖',ar:'كباب حلبي',en:'Kabab Halabi',
+   desc:'كباب حلبي مشوي بتوابل بيت وبهارات حلبية، يُقدَّم مع الأرز والسلطة.',cta:'من أشهر أطباقنا ⭐ | 26 درهم'},
+  {ico:'🐟',ar:'سمك شعري مشوي',en:'Grilled Shaeri Fish',
+   desc:'سمك شعري طازج مشوي مع الليمون والثوم والأعشاب.',cta:'مأكولات بحرية | 35 درهم'},
+  {ico:'🫔',ar:'شاورما دجاج',en:'Chicken Shawarma',
+   desc:'شاورما دجاج لبنانية أو مكسيكية بصوص الأوبرج السري وخضار طازجة.',cta:'الأوفر! | 6 دراهم فقط 🔥'},
+  {ico:'🥗',ar:'تبولة طازجة',en:'Tabouleh',
+   desc:'تبولة بقدونس طازج مع الطماطم والبصل والليمون وزيت الزيتون.',cta:'مقبلات | 14 درهم'},
+  {ico:'🍕',ar:'بيتزا بحرية',en:'Seafood Pizza',
+   desc:'بيتزا بروبيان وأسماك مع جبن موزاريلا وصوص الطماطم الخاص.',cta:'بيتزا طازجة | 30 درهم'},
+  {ico:'🥙',ar:'فطيرة شاورما',en:'Shawarma Pie',
+   desc:'خبز مقرمش محشو بالشاورما والخضار والصوصات مشوي على الطاوة.',cta:'مميز وشهي | 18 درهم'},
+  {ico:'🍗',ar:'دجاج مسحب على الفحم',en:'Boneless Charcoal Chicken',
+   desc:'دجاجة مسحبة كاملة مشوية على الفحم بالتوابل الخاصة.',cta:'الأشهر في المطعم | 35 درهم'},
+  {ico:'🥩',ar:'ستيك بالفلفل الأسود',en:'Black Pepper Steak',
+   desc:'ستيك طري بصوص الفلفل الأسود الكريمي مع البطاطا ويدجز.',cta:'خصائص الأوبرج | 36 درهم'},
+  {ico:'🍜',ar:'فتة بالشاورما',en:'Fatteh Shawarma',
+   desc:'خبز مقرمش مع اللبن والحمص والشاورما وصوص الثوم.',cta:'طبق مميز | 25 درهم'},
+  {ico:'🍰',ar:'أم علي',en:'Umm Ali',
+   desc:'حلوى أم علي الشهية بالقشطة والمكسرات والزبيب.',cta:'حلويات شرقية | 14 درهم'},
+  {ico:'🥙',ar:'مناقيش جبنة',en:'Cheese Manakish',
+   desc:'مناقيش جبنة طازجة على الصاج أو الفرن.',cta:'فطور وعشاء | 7 دراهم'},
+  {ico:'🦐',ar:'روبيان بروفنسال',en:'Provencial Shrimps',
+   desc:'روبيان طازج بالصوص البروفنسالي الكريمي مع الأرز.',cta:'مأكولات بحرية | 45 درهم'},
+];
+
+const TICKERS=[
+  '🔥 مشاوي الأوبرج الشهيرة | تكة لحم | كباب حلبي | شيش طاووق | ريش مشوية | دجاج على الفحم',
+  '⚽ العب وسجل 20 هدفاً لتحصل على كوبون خصم خاص | 30 هدفاً = عرض لا يُفوت!',
+  '📞 الفرع الرئيسي UAQ: 06 7666 551 | 06 5223 396  ✦  WhatsApp: 055 2214 107',
+  '🍕 بيتزا طازجة | مأكولات بحرية | شاورما | مناقيش | إفطار متكامل — كل يوم',
+  '🥗 مقبلات: حمص بيروتي، تبولة، فتوش، متبل، فتة، ورق عنب وأكثر!',
+  '📍 فرع السلمة: 06 5953 095  ✦  WhatsApp: 056 6010 095',
+  '🏆 اجمع أكبر نقاط وكن في قائمة أبطال مطعم الأوبرج!',
+  '🎯 أشهى المأكولات العربية والغربية والمشاوي — مطعم الأوبرج، أم القيوين',
+];
+
+const COUPONS=['OBR20','CHEF15','GOAL25','WC2026','ALOB10','GRILL20','STAR15'];
+const OFFERS=[
+  'وجبة دجاج مسحب + مشروب مجاناً لأول 5 زبائن يصلون 30 هدفاً يومياً! 🍗',
+  'خصم 20% على الفطائر والمعجنات طوال اليوم عند تقديم هذه الشاشة 🥙',
+  'صحن مقبلات مشكلة مجاناً مع كل طلب بقيمة 60 درهم فأكثر 🥗',
+  'وجبة إفطار كاملة مجاناً للفائز بأعلى نقاط في اليوم 🌅',
+];
+
+// ─── STATE ────────────────────────────────────────────────────────
+const G={
+  name:'',phone:'',score:0,goals:0,timeLeft:60,
+  running:false,timer:null,
+  m20:false,m30:false,coupon:'',
+  streak:0,lastGoalTs:0,
+  lb:JSON.parse(localStorage.getItem('oberge_lb')||'[]'),
+  customers:JSON.parse(localStorage.getItem('oberge_customers')||'[]')
+};
+
+// ─── CANVAS ───────────────────────────────────────────────────────
+const cv=document.getElementById('gameCanvas'), cx=cv.getContext('2d');
+let W=0,H=0;
+let ball,keeper,ptcls=[],trail=[];
+let charging=false,chargeTimer=null,power=0;
+let touchOrigin=null;
+let animId=null;
+
+function resize(){
+  W=cv.width=window.innerWidth;
+  H=cv.height=window.innerHeight;
+  if(ball){ ball.r=Math.min(W,H)*.044; ball.x=W*.5; ball.y=H*.73; }
+  if(keeper){ keeper.w=Math.min(W*.3,115); keeper.h=Math.min(H*.09,58); }
+}
+window.addEventListener('resize',resize);
+
+// ─── LOADING ──────────────────────────────────────────────────────
+window.addEventListener('load',()=>{
+  const bar=document.getElementById('ldBar');
+  let p=0;
+  const fill=setInterval(()=>{
+    p=Math.min(p+(Math.random()*12+5),100);
+    bar.style.width=p+'%';
+    if(p>=100){ clearInterval(fill); setTimeout(()=>{ goScreen('welcomeScreen'); buildTicker(); },400); }
+  },80);
+});
+
+function buildTicker(){
+  const el=document.getElementById('ticker');
+  el.innerHTML=TICKERS.map(t=>`<span class="ticker-item">${t}</span><span class="ticker-sep">⚽</span>`).join('');
+}
+
+// ─── SCREENS ──────────────────────────────────────────────────────
+function goScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function goLB(){
+  renderLB();
+  goScreen('lbScreen');
+}
+
+// ─── GAME INIT ────────────────────────────────────────────────────
+function initGame(){
+  G.name=document.getElementById('pName').value.trim()||'ضيف';
+  G.phone=document.getElementById('pPhone').value.trim();
+  G.score=G.goals=0; G.timeLeft=60;
+  G.running=false; G.m20=G.m30=false; G.coupon='';
+  G.streak=0; G.lastGoalTs=0;
+  clearInterval(G.timer);
+
+  // Save customer if consented
+  if(document.getElementById('pConsent').checked && G.phone){
+    G.customers.push({name:G.name,phone:G.phone,date:new Date().toLocaleDateString('ar-AE')});
+    localStorage.setItem('oberge_customers',JSON.stringify(G.customers.slice(-200)));
+  }
+
+  goScreen('gameScreen');
+  resize();
+  initBall(); initKeeper(); ptcls=[]; trail=[];
+  power=0; charging=false;
+
+  // 3-2-1 countdown
+  cancelAnimationFrame(animId);
+  showCountdown(3,()=>{
+    G.running=true;
+    G.timer=setInterval(doTick,1000);
+    animId=requestAnimationFrame(loop);
+  });
+}
+
+function showCountdown(n,done){
+  const pop=document.getElementById('countdownPop');
+  const num=document.getElementById('cdNum');
+  pop.style.display='flex';
+  num.textContent=n;
+  // force reflow to restart animation
+  num.style.animation='none'; num.offsetWidth; num.style.animation='';
+
+  if(n>0){
+    playTone(n>1?440:880,.07);
+    setTimeout(()=>showCountdown(n-1,done),900);
+  } else {
+    num.textContent='انطلق! ⚽';
+    num.style.animation='none'; num.offsetWidth; num.style.animation='';
+    playTone(1100,.08);
+    setTimeout(()=>{ pop.style.display='none'; done(); },700);
+  }
+}
+
+function initBall(){
+  ball={
+    x:W*.5+(Math.random()-.5)*W*.1, y:H*.73,
+    vx:0,vy:0, r:Math.min(W,H)*.044,
+    launched:false, spin:0,
+    shadow:true
+  };
+}
+
+function initKeeper(){
+  keeper={
+    x:W*.5, y:H*.15,
+    w:Math.min(W*.3,115), h:Math.min(H*.09,58),
+    spd:2.8+Math.random()*1.4,
+    dir:Math.random()>.5?1:-1,
+    jumpY:0,jumpVy:0,jumping:false,
+    reactionTimer:0,
+    targetX:W*.5,
+  };
+}
+
+// ─── TIMER ────────────────────────────────────────────────────────
+function doTick(){
+  if(!G.running) return;
+  G.timeLeft--;
+  const el=document.getElementById('hTimer');
+  el.textContent=G.timeLeft;
+  if(G.timeLeft<=10) el.classList.add('urgent'); else el.classList.remove('urgent');
+  if(G.timeLeft<=0) endGame();
+}
+
+// ─── GAME LOOP ────────────────────────────────────────────────────
+let prevTs=0;
+function loop(ts){
+  const dt=Math.min((ts-prevTs)/16.67,3.5);
+  prevTs=ts;
+  update(dt);
+  render();
+  animId=requestAnimationFrame(loop);
+}
+
+function update(dt){
+  updateKeeper(dt);
+  updateBall(dt);
+  updatePtcls();
+  updateTrail();
+  if(charging) { power=Math.min(power+.022*dt,1); setPowerUI(); }
+}
+
+function updateKeeper(dt){
+  // Keeper tracks ball when it's coming
+  keeper.reactionTimer-=dt;
+  if(ball.launched && ball.vy<0 && keeper.reactionTimer<=0){
+    keeper.targetX=ball.x+(ball.vx*(Math.abs(ball.y-keeper.y)/Math.max(Math.abs(ball.vy),1)));
+    keeper.reactionTimer=8+Math.random()*6;
+  } else if(!ball.launched){
+    keeper.targetX=W*.5+(Math.random()-.5)*W*.3;
+    keeper.reactionTimer=30;
+  }
+  // Move toward target
+  const diff=keeper.targetX-keeper.x;
+  const step=keeper.spd*dt;
+  if(Math.abs(diff)>step) keeper.x+=Math.sign(diff)*step;
+  else keeper.x=keeper.targetX;
+  // Clamp
+  const gl=W*.15+keeper.w/2, gr=W*.85-keeper.w/2;
+  keeper.x=Math.max(gl,Math.min(gr,keeper.x));
+  // Jump
+  if(!keeper.jumping && Math.random()<.003*dt){
+    keeper.jumping=true; keeper.jumpVy=-7;
+  }
+  if(keeper.jumping){
+    keeper.jumpVy+=.45*dt; keeper.jumpY+=keeper.jumpVy*dt;
+    if(keeper.jumpY>=0){ keeper.jumpY=0; keeper.jumping=false; }
+  }
+}
+
+function updateBall(dt){
+  if(!ball.launched) return;
+  ball.vy+=.28*dt;
+  ball.vx*=Math.pow(.993,dt);
+  ball.x+=ball.vx*dt; ball.y+=ball.vy*dt;
+  ball.spin+=ball.vx*.04*dt;
+  // Wall bounce
+  if(ball.x<ball.r){ ball.x=ball.r; ball.vx=Math.abs(ball.vx)*.65; }
+  if(ball.x>W-ball.r){ ball.x=W-ball.r; ball.vx=-Math.abs(ball.vx)*.65; }
+  if(ball.y>H+ball.r*4||ball.y<-ball.r*3){ resetBall(); return; }
+  // Goal area
+  const gTop=H*.06, gBot=H*.22, gL=W*.15, gR=W*.85;
+  if(ball.y-ball.r<gBot && ball.y+ball.r>gTop && ball.x>gL && ball.x<gR && ball.vy<-1){
+    const ky=H*.15+keeper.jumpY;
+    const inKeeperX=ball.x>keeper.x-keeper.w/2-ball.r*.8 && ball.x<keeper.x+keeper.w/2+ball.r*.8;
+    const inKeeperY=ball.y>ky-keeper.h/2-ball.r*.8 && ball.y<ky+keeper.h/2+ball.r*.8;
+    if(inKeeperX&&inKeeperY){ onSaved(); }
+    else { onGoal(); }
+  }
+}
+
+function onGoal(){
+  G.goals++;
+  const now=Date.now();
+  G.streak=(now-G.lastGoalTs<3200)?Math.min(G.streak+1,5):1;
+  G.lastGoalTs=now;
+  const bonus=G.streak;
+  const pts=10*bonus;
+  G.score+=pts;
+  document.getElementById('hScore').textContent=G.score;
+  document.getElementById('hGoals').textContent=G.goals;
+  // Goal popup
+  const msgs=['هدف! 🎯','ممتاز! 🔥','رائع! ⚡','خارق! 💥','مذهل! 🌟'];
+  document.getElementById('gTxt').textContent=msgs[Math.floor(Math.random()*msgs.length)];
+  document.getElementById('gPts').textContent=`+${pts} نقطة`;
+  document.getElementById('gStreak').textContent=bonus>1?`× ${bonus} تسلسل!`:'';
+  flashPop('goalPop',950);
+  spawnGoalPtcls();
+  confetti(22);
+  playTone(880,.06); setTimeout(()=>playTone(1100,.06),80);
+  checkMilestones();
+  // Keeper speeds up
+  keeper.spd=Math.min(2.8+G.goals*.18,7.5);
+  resetBall();
+}
+
+function onSaved(){
+  flashPop('savedPop',700);
+  spawnSavedPtcls();
+  playTone(200,.12);
+  resetBall();
+}
+
+function checkMilestones(){
+  if(G.goals===20&&!G.m20){
+    G.m20=true;
+    G.coupon=COUPONS[Math.floor(Math.random()*COUPONS.length)];
+    pauseGame();
+    openMilestone('🎉',`أحرزت 20 هدفاً يا ${G.name}!`,
+      'تهانينا! حصلت على كوبون خصم خاص من مطعم الأوبرج.\nاعرضه لكاشير المطعم للحصول على خصمك.',
+      G.coupon);
+  } else if(G.goals===30&&!G.m30){
+    G.m30=true;
+    const offer=OFFERS[Math.floor(Math.random()*OFFERS.length)];
+    pauseGame();
+    openMilestone('🏆',`أسطوري! 30 هدفاً يا ${G.name}!`,
+      `أنت نجم حقيقي! عرض خاص لك من مطعم الأوبرج:\n\n${offer}\n\nاعرض هذه الشاشة عند الطلب.`,null);
+  }
+}
+
+function pauseGame(){ G.running=false; clearInterval(G.timer); cancelAnimationFrame(animId); }
+function resumeGame(){
+  G.running=true;
+  G.timer=setInterval(doTick,1000);
+  animId=requestAnimationFrame(loop);
+}
+
+function openMilestone(em,title,body,coupon){
+  confetti(60);
+  document.getElementById('msEmoji').textContent=em;
+  document.getElementById('msTitle').textContent=title;
+  document.getElementById('msBody').textContent=body;
+  const cc=document.getElementById('msCoupon');
+  if(coupon){ cc.style.display='block'; cc.textContent=coupon; } else cc.style.display='none';
+  document.getElementById('msModal').classList.add('show');
+}
+function closeMilestone(){
+  document.getElementById('msModal').classList.remove('show');
+  resumeGame();
+}
+
+function resetBall(){
+  if(G.goals>0 && G.goals%5===0 && G.running){ showDishAd(); return; }
+  spawnNewBall();
+}
+function spawnNewBall(){
+  ball.x=W*.5+(Math.random()-.5)*W*.12;
+  ball.y=H*.73; ball.vx=0; ball.vy=0;
+  ball.launched=false; ball.spin=0; trail=[];
+  power=0; charging=false;
+  document.getElementById('powerWrap').classList.remove('visible');
+}
+
+function showDishAd(){
+  pauseGame();
+  const d=MENU[Math.floor(Math.random()*MENU.length)];
+  document.getElementById('dIcon').textContent=d.ico;
+  document.getElementById('dAr').textContent=d.ar;
+  document.getElementById('dEn').textContent=d.en;
+  document.getElementById('dDesc').textContent=d.desc;
+  document.getElementById('dCta').textContent=d.cta;
+  document.getElementById('dishAd').classList.add('show');
+}
+function closeDishAd(){
+  document.getElementById('dishAd').classList.remove('show');
+  spawnNewBall();
+  resumeGame();
+}
+
+// ─── PARTICLES ────────────────────────────────────────────────────
+function spawnGoalPtcls(){
+  const cols=['#f5c518','#c8102e','#ffffff','#00cc44','#ff8800','#00aaff'];
+  for(let i=0;i<24;i++) ptcls.push({
+    x:ball.x,y:ball.y,
+    vx:(Math.random()-.5)*14, vy:(Math.random()-.5)*14-6,
+    r:Math.random()*8+3, col:cols[Math.floor(Math.random()*cols.length)],life:1
+  });
+}
+function spawnSavedPtcls(){
+  for(let i=0;i<10;i++) ptcls.push({
+    x:ball.x,y:ball.y,
+    vx:(Math.random()-.5)*9, vy:(Math.random()-.5)*9,
+    r:Math.random()*6+2, col:'#ff4444', life:1
+  });
+}
+function updatePtcls(){
+  ptcls=ptcls.filter(p=>p.life>0);
+  ptcls.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=.35; p.life-=.025; });
+}
+function updateTrail(){
+  if(ball.launched){ trail.push({x:ball.x,y:ball.y,r:ball.r*.6,a:.55}); }
+  if(trail.length>14) trail.shift();
+  trail.forEach(t=>t.a*=.86);
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────
+function render(){
+  cx.clearRect(0,0,W,H);
+  drawField();
+  drawGoal();
+  drawKeeper();
+  trail.forEach((t,i)=>{
+    cx.beginPath(); cx.arc(t.x,t.y,t.r*(i/trail.length),0,Math.PI*2);
+    cx.fillStyle=`rgba(245,197,24,${t.a*.45})`; cx.fill();
+  });
+  drawBall();
+  drawParticles();
+  drawAimLine();
+}
+
+function drawField(){
+  // Main grass
+  const g=cx.createLinearGradient(0,H*.28,0,H);
+  g.addColorStop(0,'#1a5c1a'); g.addColorStop(.5,'#135213'); g.addColorStop(1,'#0a2a0a');
+  cx.fillStyle=g; cx.fillRect(0,H*.28,W,H*.72);
+  // Stripes
+  for(let i=0;i<10;i++){
+    if(i%2===0){ cx.fillStyle='rgba(0,0,0,.06)'; cx.fillRect(i*W/10,H*.28,W/10,H*.72); }
+  }
+  // Center spot
+  cx.strokeStyle='rgba(255,255,255,.18)'; cx.lineWidth=1.5;
+  cx.beginPath(); cx.arc(W/2,H*.78,W*.13,0,Math.PI*2); cx.stroke();
+  cx.beginPath(); cx.arc(W/2,H*.785,3,0,Math.PI*2);
+  cx.fillStyle='rgba(255,255,255,.3)'; cx.fill();
+  // Penalty lines
+  cx.strokeStyle='rgba(255,255,255,.18)'; cx.lineWidth=1.5;
+  cx.strokeRect(W*.22,H*.22,W*.56,H*.18);
+  // Penalty arc
+  cx.beginPath(); cx.arc(W/2,H*.38,W*.19,Math.PI*.1,Math.PI*.9);
+  cx.strokeStyle='rgba(255,255,255,.22)'; cx.stroke();
+  // Shot spot
+  if(!ball.launched){
+    cx.beginPath(); cx.arc(ball.x,ball.y+ball.r+5,5,0,Math.PI*2);
+    cx.fillStyle='rgba(255,255,255,.22)'; cx.fill();
+  }
+}
+
+function drawGoal(){
+  const gL=W*.15,gR=W*.85,gT=H*.06,gB=H*.22,pW=7;
+  // Net shadow
+  cx.save(); cx.shadowColor='rgba(255,255,255,.05)'; cx.shadowBlur=2;
+  cx.strokeStyle='rgba(255,255,255,.1)'; cx.lineWidth=.7;
+  for(let x2=gL;x2<=gR;x2+=20){ cx.beginPath(); cx.moveTo(x2,gT); cx.lineTo(x2,gB); cx.stroke(); }
+  for(let y2=gT;y2<=gB;y2+=15){ cx.beginPath(); cx.moveTo(gL,y2); cx.lineTo(gR,y2); cx.stroke(); }
+  cx.restore();
+  // Posts
+  const pg=cx.createLinearGradient(0,0,pW,0);
+  pg.addColorStop(0,'#fff'); pg.addColorStop(1,'#bbb');
+  cx.save(); cx.shadowColor='rgba(255,255,255,.5)'; cx.shadowBlur=10;
+  cx.fillStyle=pg;
+  cx.fillRect(gL-pW,gT,pW,gB-gT);
+  cx.fillRect(gR,gT,pW,gB-gT);
+  cx.fillRect(gL-pW,gT-pW,gR-gL+pW*2,pW);
+  cx.restore();
+}
+
+function drawKeeper(){
+  const ky=H*.15+keeper.jumpY, kx=keeper.x;
+  const kw=keeper.w, kh=keeper.h;
+  cx.save();
+  // Body
+  const bg=cx.createLinearGradient(kx-kw/2,ky-kh/2,kx+kw/2,ky+kh/2);
+  bg.addColorStop(0,'#d01030'); bg.addColorStop(.5,'#c8102e'); bg.addColorStop(1,'#8b0a1e');
+  cx.fillStyle=bg;
+  cx.beginPath(); cx.roundRect(kx-kw/2,ky-kh/2,kw,kh,10); cx.fill();
+  // Jersey stripes
+  cx.strokeStyle='rgba(245,197,24,.35)'; cx.lineWidth=2;
+  cx.beginPath(); cx.moveTo(kx-kw*.1,ky-kh/2); cx.lineTo(kx-kw*.1,ky+kh/2); cx.stroke();
+  cx.beginPath(); cx.moveTo(kx+kw*.1,ky-kh/2); cx.lineTo(kx+kw*.1,ky+kh/2); cx.stroke();
+  // Gloves
+  cx.fillStyle='#e8c800';
+  cx.beginPath(); cx.arc(kx-kw/2-6,ky+2,11,0,Math.PI*2); cx.fill();
+  cx.beginPath(); cx.arc(kx+kw/2+6,ky+2,11,0,Math.PI*2); cx.fill();
+  // Head
+  cx.fillStyle='#e8a060';
+  cx.beginPath(); cx.arc(kx,ky-kh/2-13,15,0,Math.PI*2); cx.fill();
+  // Helmet/cap
+  cx.fillStyle='#c8102e';
+  cx.beginPath(); cx.arc(kx,ky-kh/2-15,15,Math.PI,0); cx.fill();
+  // Number
+  cx.fillStyle='#fff'; cx.font=`bold ${Math.max(14,kh*.38)}px 'Bebas Neue',sans-serif`;
+  cx.textAlign='center'; cx.textBaseline='middle';
+  cx.fillText('1',kx,ky+1);
+  cx.restore();
+}
+
+function drawBall(){
+  cx.save(); cx.translate(ball.x,ball.y); cx.rotate(ball.spin);
+  // Shadow (only near ground)
+  if(!ball.launched || ball.y>H*.5){
+    const sh=Math.max(.1,1-(ball.y/H)*.8);
+    cx.beginPath(); cx.ellipse(0,ball.r+3,ball.r*.75,ball.r*.18,0,0,Math.PI*2);
+    cx.fillStyle=`rgba(0,0,0,${sh*.35})`; cx.fill();
+  }
+  // Ball
+  const gr=cx.createRadialGradient(-ball.r*.28,-ball.r*.28,ball.r*.08,0,0,ball.r);
+  gr.addColorStop(0,'#f5f5f5'); gr.addColorStop(.55,'#ddd'); gr.addColorStop(1,'#aaa');
+  cx.beginPath(); cx.arc(0,0,ball.r,0,Math.PI*2);
+  cx.fillStyle=gr; cx.fill();
+  // Patches
+  cx.fillStyle='#1a1a1a';
+  [[0,-.52],[.44,.26],[-.44,.26]].forEach(([hx,hy])=>{
+    cx.beginPath(); cx.arc(hx*ball.r*1.08,hy*ball.r*1.08,ball.r*.23,0,Math.PI*2); cx.fill();
+  });
+  // Shine
+  cx.beginPath(); cx.ellipse(-ball.r*.26,-ball.r*.28,ball.r*.19,ball.r*.1,-.5,0,Math.PI*2);
+  cx.fillStyle='rgba(255,255,255,.72)'; cx.fill();
+  cx.restore();
+}
+
+function drawParticles(){
+  ptcls.forEach(p=>{
+    cx.beginPath(); cx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    cx.fillStyle=p.col+(Math.floor(p.life*255).toString(16).padStart(2,'0'));
+    cx.fill();
+  });
+}
+
+function drawAimLine(){
+  if(!charging||!touchOrigin||power<.05) return;
+  cx.save();
+  cx.setLineDash([6,6]);
+  cx.strokeStyle=`rgba(245,197,24,${power*.6})`;
+  cx.lineWidth=1.5;
+  const angle=Math.atan2(
+    ball.y-(touchOrigin.y||ball.y),
+    ball.x-(touchOrigin.x||ball.x)
+  );
+  const len=80*power;
+  cx.beginPath();
+  cx.moveTo(ball.x,ball.y);
+  cx.lineTo(ball.x+Math.cos(angle)*len,ball.y+Math.sin(angle)*len);
+  cx.stroke();
+  cx.restore();
+}
+
+// ─── TOUCH ────────────────────────────────────────────────────────
+function setPowerUI(){
+  const pf=document.getElementById('powerFill');
+  pf.style.width=(power*100)+'%';
+  const col=power<.4?'linear-gradient(90deg,#00cc44,#88ee00)':
+             power<.75?'linear-gradient(90deg,#f5c518,#ff8800)':
+             'linear-gradient(90deg,#ff4400,#ff0000)';
+  pf.style.background=col;
+}
+
+cv.addEventListener('touchstart',onTS,{passive:false});
+cv.addEventListener('touchmove',onTM,{passive:false});
+cv.addEventListener('touchend',onTE,{passive:false});
+cv.addEventListener('mousedown',e=>onTS({preventDefault:()=>{},touches:[{clientX:e.clientX,clientY:e.clientY}]}));
+cv.addEventListener('mousemove',e=>onTM({preventDefault:()=>{},touches:[{clientX:e.clientX,clientY:e.clientY}]}));
+cv.addEventListener('mouseup',e=>onTE({preventDefault:()=>{},changedTouches:[{clientX:e.clientX,clientY:e.clientY}]}));
+
+function onTS(e){
+  e.preventDefault();
+  if(!G.running||ball.launched) return;
+  const t=e.touches[0];
+  touchOrigin={x:t.clientX,y:t.clientY};
+  charging=true; power=0;
+  document.getElementById('powerWrap').classList.add('visible');
+  getAudio();
+}
+function onTM(e){
+  e.preventDefault();
+}
+function onTE(e){
+  e.preventDefault();
+  if(!G.running||!charging||ball.launched){ charging=false; return; }
+  charging=false;
+  document.getElementById('powerWrap').classList.remove('visible');
+  const t=e.changedTouches[0];
+  if(!touchOrigin) return;
+  const dx=touchOrigin.x-t.clientX, dy=touchOrigin.y-t.clientY;
+  const dist=Math.sqrt(dx*dx+dy*dy);
+  const spd=Math.max(12,power*32+dist*.12);
+  const angle=Math.atan2(dy,dx);
+  ball.vx=Math.cos(angle)*spd;
+  ball.vy=Math.sin(angle)*spd;
+  ball.launched=true;
+  power=0; setPowerUI();
+  playTone(520,.08);
+}
+
+// ─── END GAME ─────────────────────────────────────────────────────
+function endGame(){
+  G.running=false; clearInterval(G.timer);
+  cancelAnimationFrame(animId);
+  const entry={name:G.name,score:G.score,goals:G.goals,
+    date:new Date().toLocaleDateString('ar-AE'),coupon:G.coupon};
+  G.lb.push(entry);
+  G.lb.sort((a,b)=>b.score-a.score);
+  G.lb=G.lb.slice(0,25);
+  localStorage.setItem('oberge_lb',JSON.stringify(G.lb));
+  const rank=G.lb.findIndex(e=>e===entry)+1;
+  setTimeout(()=>showResults(rank),600);
+}
+
+function showResults(rank){
+  document.getElementById('rName').textContent=G.name;
+  document.getElementById('rScore').textContent=G.score;
+  document.getElementById('rGoals').textContent=`⚽ ${G.goals} هدف`;
+  const emojis=[[0,'😊'],[5,'⚽'],[10,'🔥'],[20,'🏅'],[30,'🥇'],[50,'🏆']];
+  let em='😊'; emojis.forEach(([t,e])=>{ if(G.goals>=t) em=e; });
+  document.getElementById('rEmoji').textContent=em;
+  const rb=document.getElementById('rRank');
+  const rtxt={1:'🥇 المركز الأول!',2:'🥈 المركز الثاني',3:'🥉 المركز الثالث'};
+  rb.textContent=rtxt[rank]||`المركز #${rank}`;
+  rb.className='rank-badge '+(rank<=3?'r'+rank:'rn');
+  if(G.coupon){
+    document.getElementById('rCouponWrap').style.display='block';
+    document.getElementById('rCoupon').textContent=G.coupon;
+  } else document.getElementById('rCouponWrap').style.display='none';
+  goScreen('resultsScreen');
+  if(G.goals>=5) confetti(45);
+}
+
+// ─── LEADERBOARD ──────────────────────────────────────────────────
+function renderLB(){
+  const el=document.getElementById('lbList');
+  if(!G.lb.length){
+    el.innerHTML='<div class="lb-empty">لا توجد نتائج بعد.<br>كن أول الأبطال! ⚽</div>'; return;
+  }
+  el.innerHTML=G.lb.map((e,i)=>{
+    const rc=['lbr1','lbr2','lbr3'][i]||'';
+    const rcc=['lbrc1','lbrc2','lbrc3'][i]||'lbrcn';
+    const ric=['🥇','🥈','🥉'][i]||(i+1);
+    return `<div class="lb-row ${rc}">
+      <div class="lb-rank ${rcc}">${ric}</div>
+      <div class="lb-info">
+        <div class="lb-name">${e.name}</div>
+        <div class="lb-meta">⚽ ${e.goals} هدف &nbsp;|&nbsp; ${e.date}</div>
+      </div>
+      <div class="lb-score">${e.score}</div>
+    </div>`;
+  }).join('');
+}
+
+// ─── WHATSAPP ─────────────────────────────────────────────────────
+function waShare(){
+  let m=`🏆 *مطعم الأوبرج - تحدي كأس العالم* ⚽\n\n`;
+  m+=`👤 اللاعب: *${G.name}*\n`;
+  m+=`🎯 النقاط: *${G.score} نقطة*\n`;
+  m+=`⚽ الأهداف: *${G.goals} هدف*\n`;
+  if(G.coupon) m+=`🎁 كوبون الخصم: *${G.coupon}*\n`;
+  m+=`\n🍖 أشهى المأكولات العربية والغربية والمشاوي\n`;
+  m+=`📞 UAQ: 06 7666 551 | Salama: 06 5953 095\n`;
+  m+=`💬 WhatsApp: 055 2214 107`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(m)}`,'_blank');
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────
+function flashPop(id,dur){
+  const el=document.getElementById(id);
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),dur);
+}
+
+// ─── CONFETTI ─────────────────────────────────────────────────────
+const cvc=document.getElementById('confetti');
+const ccc=cvc.getContext('2d');
+let cPtcls=[],cRunning=false;
+function confetti(n=30){
+  cvc.width=window.innerWidth; cvc.height=window.innerHeight;
+  const cols=['#f5c518','#c8102e','#ffffff','#00cc44','#ff8800','#0066cc','#ff44aa'];
+  for(let i=0;i<n;i++) cPtcls.push({
+    x:Math.random()*cvc.width, y:-10,
+    vx:(Math.random()-.5)*7, vy:Math.random()*5+2,
+    w:Math.random()*9+4, h:Math.random()*16+6,
+    ang:Math.random()*Math.PI*2, av:(Math.random()-.5)*.18,
+    col:cols[Math.floor(Math.random()*cols.length)], life:1
+  });
+  if(!cRunning) animConf();
+}
+function animConf(){
+  cRunning=true;
+  ccc.clearRect(0,0,cvc.width,cvc.height);
+  cPtcls.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy; p.ang+=p.av; p.life-=.007;
+    ccc.save(); ccc.translate(p.x,p.y); ccc.rotate(p.ang);
+    ccc.globalAlpha=Math.max(0,p.life);
+    ccc.fillStyle=p.col; ccc.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+    ccc.restore();
+  });
+  cPtcls=cPtcls.filter(p=>p.life>0&&p.y<cvc.height+20);
+  if(cPtcls.length) requestAnimationFrame(animConf); else cRunning=false;
+}
+
+// ─── AUDIO ────────────────────────────────────────────────────────
+let actx=null;
+function getAudio(){ if(!actx) try{ actx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){} return actx; }
+function playTone(f,d=.09){
+  const a=getAudio(); if(!a) return;
+  try{
+    const o=a.createOscillator(), g=a.createGain();
+    o.connect(g); g.connect(a.destination);
+    o.frequency.value=f; o.type='sine';
+    g.gain.setValueAtTime(.14,a.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d);
+    o.start(); o.stop(a.currentTime+d);
+  }catch(e){}
+}
+document.addEventListener('touchstart',()=>getAudio(),{once:true});
+document.addEventListener('click',()=>getAudio(),{once:true});
+
+// ─── SERVICE WORKER ───────────────────────────────────────────────
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
